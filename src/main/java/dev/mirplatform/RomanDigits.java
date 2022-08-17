@@ -5,11 +5,23 @@ import java.util.Map;
 
 public class RomanDigits {
 
-    private static final Integer M = 1000;
-    private static final Integer D = 500;
-    private static final Integer C = 100;
-    private static final Integer L = 50;
-    private static final Integer X = 10;
+    private enum Roman {
+        M(1000),
+        CM(900),
+        D(500),
+        CD(400),
+        C(100),
+        XC(90),
+        L(50),
+        XL(40),
+        X(10);
+
+        final int arabic;
+
+        Roman(int arabic) {
+            this.arabic = arabic;
+        }
+    }
 
     private static final Map<Integer, String> NUMBERS = new HashMap<>() {
         {
@@ -22,11 +34,6 @@ public class RomanDigits {
             put(7, "VII");
             put(8, "VIII");
             put(9, "IX");
-            put(10, "X");
-            put(50, "L");
-            put(100, "C");
-            put(500, "D");
-            put(1000, "M");
         }
     };
 
@@ -34,23 +41,27 @@ public class RomanDigits {
         if (arabic > 3000) {
             throw new IllegalArgumentException("Недопустимое число: " + arabic);
         }
-        if (arabic >= M) {
-            return "M";
-        } else if (arabic >= D) {
-            return "D";
-        } else if (arabic >= C) {
-            return "C";
-        } else if (arabic >= L) {
-            return "L";
-        } else {
-            if (arabic <= 10) {
-                return NUMBERS.get(arabic);
-            }
-            if (arabic <= 20) {
-                return "X" + NUMBERS.get(arabic - 10);
+        var builder = new StringBuilder();
+        buildResult(builder, arabic);
+        return builder.toString();
+    }
+
+    private static void buildResult(StringBuilder builder, int arabic) {
+        if (arabic == 0) {
+            return;
+        }
+        if (arabic < 10) {
+            builder.append(NUMBERS.get(arabic));
+            return;
+        }
+        for (var r : Roman.values()) {
+            if (arabic >= r.arabic) {
+                builder.append(r.name());
+                arabic -= r.arabic;
+                buildResult(builder, arabic);
+                break;
             }
         }
-        return null;
     }
 
 }

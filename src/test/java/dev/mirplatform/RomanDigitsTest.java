@@ -2,48 +2,13 @@ package dev.mirplatform;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RomanDigitsTest {
-
-    @ParameterizedTest
-    @CsvSource({
-        "1,I",
-        "2,II",
-        "3,III",
-        "4,IV",
-        "5,V",
-        "6,VI",
-        "7,VII",
-        "8,VIII",
-        "9,IX",
-        "10,X"
-    })
-    void fromOneToTen(int arabic, String expectedRoman) {
-        String actualRoman = RomanDigits.convert(arabic);
-        assertEquals(expectedRoman, actualRoman);
-    }
-
-    @ParameterizedTest
-    @CsvSource({
-        "11,XI",
-        "12,XII",
-        "13,XIII",
-        "14,XIV",
-        "15,XV",
-        "16,XVI",
-        "17,XVII",
-        "18,XVIII",
-        "19,XIX",
-        "20,XX"
-    })
-    void fromTenToTwenty(int arabic, String expectedRoman) {
-        String actualRoman = RomanDigits.convert(arabic);
-        assertEquals(expectedRoman, actualRoman);
-    }
 
     @ParameterizedTest
     @CsvSource({
@@ -57,17 +22,27 @@ class RomanDigitsTest {
         assertEquals(expectedRoman, actualRoman);
     }
 
+    @ParameterizedTest
+    @CsvFileSource(resources = "/1-100.txt", delimiter = '\t')
+    void from1to100(int arabic, String expectedRoman) {
+        String actualRoman = RomanDigits.convert(arabic);
+        assertEquals(expectedRoman, actualRoman);
+    }
+
     @Test
     public void noMore3000() {
         assertThrows(IllegalArgumentException.class, () -> RomanDigits.convert(3001));
     }
+
     @ParameterizedTest
     @CsvSource({
-            "47,XLVII",
-            "88,LXXXVIII",
-            "99,XCIX"
+            "1984,MCMLXXXIV",
+            "2984,MMCMLXXXIV",
+            "1774,MDCCLXXIV",
+            "900,CM",
+            "200,CC"
     })
-    public void complexCases(int arabic, String expectedRoman) {
+    public void bigNumbers(int arabic, String expectedRoman) {
         String actualRoman = RomanDigits.convert(arabic);
         assertEquals(expectedRoman, actualRoman);
     }
