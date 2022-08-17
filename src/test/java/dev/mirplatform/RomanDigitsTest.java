@@ -25,23 +25,35 @@ class RomanDigitsTest {
         assertEquals(expectedRoman, actualRoman);
     }
 
-//    @ParameterizedTest
-//    @CsvSource({
-//        "11,XI",
-//        "12,XII",
-//        "13,III",
-//        "14,IV",
-//        "15,V",
-//        "16,VI",
-//        "17,VII",
-//        "18,VIII",
-//        "19,IX",
-//        "20,X"
-//    })
-//    void fromOneToTen(int arabic, String expectedRoman) {
-//        String actualRoman = RomanDigits.convert(arabic);
-//        assertEquals(expectedRoman, actualRoman);
-//    }
+    @ParameterizedTest
+    @CsvSource({
+        "11,XI",
+        "12,XII",
+        "13,XIII",
+        "14,XIV",
+        "15,XV",
+        "16,XVI",
+        "17,XVII",
+        "18,XVIII",
+        "19,XIX",
+        "20,XX"
+    })
+    void fromTenToTwenty(int arabic, String expectedRoman) {
+        String actualRoman = RomanDigits.convert(arabic);
+        assertEquals(expectedRoman, actualRoman);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "50,L",
+            "100,C",
+            "500,D",
+            "1000,M"
+    })
+    void roundNumbers(int arabic, String expectedRoman) {
+        String actualRoman = RomanDigits.convert(arabic);
+        assertEquals(expectedRoman, actualRoman);
+    }
 
 
 }
