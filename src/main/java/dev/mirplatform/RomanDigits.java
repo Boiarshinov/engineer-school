@@ -31,6 +31,9 @@ public class RomanDigits {
     };
 
     public static String convert(int arabic) {
+        if (arabic > 3000) {
+            throw new IllegalArgumentException("Недопустимое число: " + arabic);
+        }
         if (arabic >= M) {
             return "M";
         } else if (arabic >= D) {

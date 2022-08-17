@@ -1,9 +1,11 @@
 package dev.mirplatform;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RomanDigitsTest {
 
@@ -54,6 +56,23 @@ class RomanDigitsTest {
         String actualRoman = RomanDigits.convert(arabic);
         assertEquals(expectedRoman, actualRoman);
     }
+
+    @Test
+    public void noMore3000() {
+        assertThrows(IllegalArgumentException.class, () -> RomanDigits.convert(3001));
+    }
+    @ParameterizedTest
+    @CsvSource({
+            "47,XLVII",
+            "88,LXXXVIII",
+            "99,XCIX"
+    })
+    public void complexCases(int arabic, String expectedRoman) {
+        String actualRoman = RomanDigits.convert(arabic);
+        assertEquals(expectedRoman, actualRoman);
+    }
+
+
 
 
 }
