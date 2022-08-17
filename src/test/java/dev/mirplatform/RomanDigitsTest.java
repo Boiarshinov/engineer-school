@@ -24,4 +24,24 @@ class RomanDigitsTest {
         String actualRoman = RomanDigits.convert(arabic);
         assertEquals(expectedRoman, actualRoman);
     }
+
+//    @ParameterizedTest
+//    @CsvSource({
+//        "11,XI",
+//        "12,XII",
+//        "13,III",
+//        "14,IV",
+//        "15,V",
+//        "16,VI",
+//        "17,VII",
+//        "18,VIII",
+//        "19,IX",
+//        "20,X"
+//    })
+//    void fromOneToTen(int arabic, String expectedRoman) {
+//        String actualRoman = RomanDigits.convert(arabic);
+//        assertEquals(expectedRoman, actualRoman);
+//    }
+
+
 }
