@@ -1,12 +1,5 @@
 package dev.mirplatform;
 
-import javafx.scene.transform.Scale;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 public class RomanDigits {
 
     public static String convert(int arabic) {
