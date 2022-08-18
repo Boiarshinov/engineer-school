@@ -1,5 +1,7 @@
 package dev.mirplatform;
 
+import javafx.scene.transform.Scale;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,56 +14,36 @@ public class RomanDigits {
             throw new IllegalArgumentException("Недопустимое число: " + arabic);
         }
 
-        int thousands = arabic / 1000;
-        int hundreds = (arabic % 1000) / 100;
-        int tens = (arabic % 100) / 10;
-        int ones = arabic % 10;
+        return convertArabicToRoman(arabic, "", Roman.M);
+    }
 
-        return Stream.of(
-                oneDigitRule(thousands, Scale.THOUSANDS),
-                oneDigitRule(hundreds, Scale.HUNDREDS),
-                oneDigitRule(tens, Scale.TENS),
-                oneDigitRule(ones, Scale.ONES)
-            )
-            .flatMap(Collection::stream)
-            .map(Enum::name)
-            .collect(Collectors.joining(""));
+    private static String convertArabicToRoman(int arabic, String buffer, Roman current) {
+        if (arabic == 0) {
+            return buffer;
+        }
+        if (arabic - current.value >= 0) {
+            return buffer + current.name() + convertArabicToRoman(arabic - current.value, buffer, current);
+        }
+
+        int prefixToSubtract = arabic - (current.value - current.toSubtract.value);
+        if (prefixToSubtract >= 0 && prefixToSubtract <= current.toSubtract.value) {
+            return buffer + current.toSubtract.name() + current.name() + convertArabicToRoman(arabic - current.value + current.toSubtract.value, buffer, current.next);
+        }
+        return buffer + convertArabicToRoman(arabic, buffer, current.next);
     }
 
     private enum Roman {
-        I, V, X, L, C, D, M
-    }
+        I(1, null, null), V(5, I, I), X(10, V, I), L(50, X, X), C(100, L, X), D(500, C, C), M(1000, D, C);
 
-    private enum Scale {
-        ONES(Roman.I, Roman.V, Roman.X),
-        TENS(Roman.X, Roman.L, Roman.C),
-        HUNDREDS(Roman.C, Roman.D, Roman.M),
-        THOUSANDS(Roman.M, null, null);
-
-        public final Roman one;
-        public final Roman five;
-        public final Roman ten;
-
-        Scale(Roman one, Roman five, Roman ten) {
-            this.one = one;
-            this.five = five;
-            this.ten = ten;
+        Roman(int value, Roman next, Roman toSubtract) {
+            this.value = value;
+            this.next = next;
+            this.toSubtract = toSubtract;
         }
+
+        final int value;
+        final Roman next;
+        final Roman toSubtract;
     }
 
-    private static List<Roman> oneDigitRule(int a, Scale scale) {
-        switch (a) {
-            case 0: return List.of();
-            case 1: return List.of(scale.one);
-            case 2: return List.of(scale.one, scale.one);
-            case 3: return List.of(scale.one, scale.one, scale.one);
-            case 4: return List.of(scale.one, scale.five);
-            case 5: return List.of(scale.five);
-            case 6: return List.of(scale.five, scale.one);
-            case 7: return List.of(scale.five, scale.one, scale.one);
-            case 8: return List.of(scale.five, scale.one, scale.one, scale.one);
-            case 9: return List.of(scale.one, scale.ten);
-            default: throw new IllegalArgumentException("param should be from 0 to 9, but was " + a);
-        }
-    }
 }
