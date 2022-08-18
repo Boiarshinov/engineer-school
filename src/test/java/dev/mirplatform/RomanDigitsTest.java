@@ -29,24 +29,6 @@ class RomanDigitsTest {
 
     @ParameterizedTest
     @CsvSource({
-        "11,XI",
-        "12,XII",
-        "13,XIII",
-        "14,XIV",
-        "15,XV",
-        "16,XVI",
-        "17,XVII",
-        "18,XVIII",
-        "19,XIX",
-        "20,XX"
-    })
-    void fromTenToTwenty(int arabic, String expectedRoman) {
-        String actualRoman = RomanDigits.convert(arabic);
-        assertEquals(expectedRoman, actualRoman);
-    }
-
-    @ParameterizedTest
-    @CsvSource({
             "50,L",
             "100,C",
             "500,D",
@@ -61,18 +43,24 @@ class RomanDigitsTest {
     public void noMore3000() {
         assertThrows(IllegalArgumentException.class, () -> RomanDigits.convert(3001));
     }
+
+    @Test
+    public void notLessThan1() {
+        assertThrows(IllegalArgumentException.class, () -> RomanDigits.convert(0));
+    }
+
     @ParameterizedTest
     @CsvSource({
-            "47,XLVII",
-            "88,LXXXVIII",
-            "99,XCIX"
+        "47,XLVII",
+        "88,LXXXVIII",
+        "99,XCIX",
+        "246,CCXLVI",
+        "789,DCCLXXXIX",
+        "2421,MMCDXXI",
+        "1066,MLXVI"
     })
     public void complexCases(int arabic, String expectedRoman) {
         String actualRoman = RomanDigits.convert(arabic);
         assertEquals(expectedRoman, actualRoman);
     }
-
-
-
-
 }
