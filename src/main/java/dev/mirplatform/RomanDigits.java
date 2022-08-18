@@ -1,8 +1,5 @@
 package dev.mirplatform;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class RomanDigits {
 
     private enum Roman {
@@ -14,7 +11,11 @@ public class RomanDigits {
         XC(90),
         L(50),
         XL(40),
-        X(10);
+        X(10),
+        IX(9),
+        V(5),
+        IV(4),
+        I(1);
 
         final int arabic;
 
@@ -22,20 +23,6 @@ public class RomanDigits {
             this.arabic = arabic;
         }
     }
-
-    private static final Map<Integer, String> NUMBERS = new HashMap<>() {
-        {
-            put(1, "I");
-            put(2, "II");
-            put(3, "III");
-            put(4, "IV");
-            put(5, "V");
-            put(6, "VI");
-            put(7, "VII");
-            put(8, "VIII");
-            put(9, "IX");
-        }
-    };
 
     public static String convert(int arabic) {
         if (arabic > 3000) {
@@ -50,10 +37,6 @@ public class RomanDigits {
         if (arabic == 0) {
             return;
         }
-        if (arabic < 10) {
-            builder.append(NUMBERS.get(arabic));
-            return;
-        }
         for (var r : Roman.values()) {
             if (arabic >= r.arabic) {
                 builder.append(r.name());
@@ -63,5 +46,4 @@ public class RomanDigits {
             }
         }
     }
-
 }
