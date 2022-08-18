@@ -7,22 +7,30 @@ public class RomanDigits {
             throw new IllegalArgumentException("Недопустимое число: " + arabic);
         }
 
-        return convertArabicToRoman(arabic, "", Roman.M);
+        return convertArabicToRoman(arabic, new StringBuilder(), Roman.M).toString();
     }
 
-    private static String convertArabicToRoman(int arabic, String buffer, Roman current) {
+    private static StringBuilder convertArabicToRoman(int arabic, StringBuilder buffer, Roman currentRomanDigit) {
         if (arabic == 0) {
             return buffer;
         }
-        if (arabic - current.value >= 0) {
-            return buffer + current.name() + convertArabicToRoman(arabic - current.value, buffer, current);
+        if (arabic - currentRomanDigit.value >= 0) {
+            return convertArabicToRoman(
+                    arabic - currentRomanDigit.value,
+                    buffer.append(currentRomanDigit.name()),
+                    currentRomanDigit
+            );
         }
 
-        int prefixToSubtract = arabic - (current.value - current.toSubtract.value);
-        if (prefixToSubtract >= 0 && prefixToSubtract <= current.toSubtract.value) {
-            return buffer + current.toSubtract.name() + current.name() + convertArabicToRoman(arabic - current.value + current.toSubtract.value, buffer, current.next);
+        int prefixSubtracted = arabic - (currentRomanDigit.value - currentRomanDigit.toSubtract.value);
+        if (prefixSubtracted >= 0 && prefixSubtracted <= currentRomanDigit.toSubtract.value) {
+            return convertArabicToRoman(
+                    prefixSubtracted,
+                    buffer.append(currentRomanDigit.toSubtract.name()).append(currentRomanDigit.name()),
+                    currentRomanDigit.next
+            );
         }
-        return buffer + convertArabicToRoman(arabic, buffer, current.next);
+        return convertArabicToRoman(arabic, buffer, currentRomanDigit.next);
     }
 
     private enum Roman {
