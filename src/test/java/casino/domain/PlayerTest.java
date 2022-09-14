@@ -2,6 +2,8 @@ package casino.domain;
 
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -62,5 +64,27 @@ public class PlayerTest {
         int chipsDelta = player.getAvailableChips() - initialChipsCount;
 
         assertEquals(10, chipsDelta);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 3, 4, 5, 6})
+    public void playerCanBetOnNumbersFromOneToSix(int betValue) throws CasinoGameException {
+        RollDiceGame game = new RollDiceGame();
+        Player player = new Player();
+        player.joins(game);
+        player.buy(1);
+
+        player.bet(Bet.createBet(1, betValue));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 7})
+    public void playerCanNotBetOnNumbersOutsideRangeOneToSix(int betValue) throws CasinoGameException {
+        RollDiceGame game = new RollDiceGame();
+        Player player = new Player();
+        player.joins(game);
+        player.buy(1);
+
+        assertThrows(CasinoGameException.class, () -> player.bet(Bet.createBet(1, betValue)));
     }
 }

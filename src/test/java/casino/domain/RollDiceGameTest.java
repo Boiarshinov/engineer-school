@@ -34,7 +34,7 @@ class RollDiceGameTest {
         Player winner = new Player();
         winner.buy(basicBet);
         winner.joins(game);
-        winner.bet(new Bet(basicBet, winningScore));
+        winner.bet(Bet.createBet(basicBet, winningScore));
 
         game.play();
 
@@ -51,12 +51,12 @@ class RollDiceGameTest {
         for (Player player : players) {
             player.buy(basicBet);
             player.joins(game);
-            player.bet(new Bet(basicBet, 1));
+            player.bet(Bet.createBet(basicBet, 1));
         }
         Player winner = new Player();
         winner.buy(basicBet);
         winner.joins(game);
-        winner.bet(new Bet(basicBet, winningScore));
+        winner.bet(Bet.createBet(basicBet, winningScore));
 
         game.play();
 
