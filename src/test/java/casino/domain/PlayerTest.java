@@ -35,11 +35,7 @@ public class PlayerTest {
 
     @Test
     public void playerCanBuyChip() throws CasinoGameException {
-        RollDiceGame game = new RollDiceGame();
-        Player player = new Player();
-        player.joins(game);
-
-        player.buy(1);
+        Player player = createGameAndPlayerWithMoney(1);
 
         assertEquals(1, player.getAvailableChips());
     }
@@ -55,9 +51,7 @@ public class PlayerTest {
 
     @Test
     public void amountOfBoughtChipsEqualsToPlayerDelta() throws CasinoGameException {
-        RollDiceGame game = new RollDiceGame();
-        Player player = new Player();
-        player.joins(game);
+        Player player = createGameAndPlayerWithMoney(0);
         int initialChipsCount = player.getAvailableChips();
 
         player.buy(10);
@@ -66,25 +60,29 @@ public class PlayerTest {
         assertEquals(10, chipsDelta);
     }
 
+    //todo move test to BetTest
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6})
     public void playerCanBetOnNumbersFromOneToSix(int betValue) throws CasinoGameException {
-        RollDiceGame game = new RollDiceGame();
-        Player player = new Player();
-        player.joins(game);
-        player.buy(1);
+        Player player = createGameAndPlayerWithMoney(1);
 
         player.bet(Bet.createBet(1, betValue));
     }
 
+    //todo move test to BetTest
     @ParameterizedTest
     @ValueSource(ints = {0, 7})
     public void playerCanNotBetOnNumbersOutsideRangeOneToSix(int betValue) throws CasinoGameException {
+        Player player = createGameAndPlayerWithMoney(1);
+
+        assertThrows(CasinoGameException.class, () -> player.bet(Bet.createBet(1, betValue)));
+    }
+
+    private Player createGameAndPlayerWithMoney(int chips) throws CasinoGameException {
         RollDiceGame game = new RollDiceGame();
         Player player = new Player();
         player.joins(game);
-        player.buy(1);
-
-        assertThrows(CasinoGameException.class, () -> player.bet(Bet.createBet(1, betValue)));
+        player.buy(chips);
+        return player;
     }
 }

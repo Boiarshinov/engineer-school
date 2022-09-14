@@ -15,6 +15,7 @@ public class Bet {
         }
         return new Bet(amount, score);
     }
+
     private Bet(int amount, int score) {
         this.amount = amount;
         this.score = score;
