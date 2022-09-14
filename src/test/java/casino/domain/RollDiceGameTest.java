@@ -2,15 +2,21 @@ package casino.domain;
 
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static casino.domain.Bet.createBet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 class RollDiceGameTest {
+
+    private static final int WINNING_SCORE = 6;
+    private static final int LOOSING_SCORE = 2;
 
     @Test
     void onlySixPlayersCanJoinToGame() throws CasinoGameException {
@@ -34,7 +40,7 @@ class RollDiceGameTest {
         Player winner = new Player();
         winner.buy(basicBet);
         winner.joins(game);
-        winner.bet(Bet.createBet(basicBet, winningScore));
+        winner.bet(createBet(basicBet, winningScore));
 
         game.play();
 
@@ -44,22 +50,68 @@ class RollDiceGameTest {
     @Test
     void losersLoseTheirBets() throws CasinoGameException {
         int basicBet = 1;
-        int winningScore = 6;
-        RollDiceGame game = new RollDiceGame(() -> winningScore);
+        RollDiceGame game = new RollDiceGame(() -> WINNING_SCORE);
 
         List<Player> players = IntStream.range(0, 5).mapToObj(i -> new Player()).collect(Collectors.toList());
         for (Player player : players) {
             player.buy(basicBet);
             player.joins(game);
-            player.bet(Bet.createBet(basicBet, 1));
+            player.bet(createBet(basicBet, 1));
         }
         Player winner = new Player();
         winner.buy(basicBet);
         winner.joins(game);
-        winner.bet(Bet.createBet(basicBet, winningScore));
+        winner.bet(createBet(basicBet, WINNING_SCORE));
 
         game.play();
 
         assertEquals(basicBet * 6, winner.getAvailableChips());
+    }
+
+    @Test
+    public void playCausesPlayerToWinWithSixBets() throws CasinoGameException {
+        var betAmount = 1;
+        var winner = spy(Player.class);
+        RollDiceGame game = new RollDiceGame(() -> WINNING_SCORE);
+        winner.buy(betAmount);
+        winner.joins(game);
+        winner.bet(createBet(betAmount, WINNING_SCORE));
+
+        game.play();
+
+        verify(winner).win(betAmount * 6);
+    }
+
+    @Test
+    public void playCausesPlayerToLoseTheirBets() throws CasinoGameException {
+        var betAmount = 1;
+        var loser = spy(Player.class);
+        RollDiceGame game = new RollDiceGame(() -> WINNING_SCORE);
+        loser.buy(betAmount);
+        loser.joins(game);
+        loser.bet(createBet(betAmount, LOOSING_SCORE));
+
+        game.play();
+
+        verify(loser).lose();
+    }
+
+    @Test
+    public void playCausesManyPlayersToWinWithSixBets() throws CasinoGameException {
+        var betAmount = 1;
+        var winner1 = spy(Player.class);
+        var winner2 = spy(Player.class);
+        RollDiceGame game = new RollDiceGame(() -> WINNING_SCORE);
+        winner1.buy(betAmount);
+        winner1.joins(game);
+        winner1.bet(createBet(betAmount, WINNING_SCORE));
+        winner2.buy(betAmount);
+        winner2.joins(game);
+        winner2.bet(createBet(betAmount, WINNING_SCORE));
+
+        game.play();
+
+        verify(winner1).win(betAmount * 6);
+        verify(winner2).win(betAmount * 6);
     }
 }
