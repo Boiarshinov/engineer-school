@@ -46,5 +46,7 @@ public class Player {
     }
 
     public void bet(int chipsAmount, int betNumber) {
+        Bet bet = new Bet(chipsAmount, betNumber);
+        this.chipsAmount -= chipsAmount;
     }
 }
