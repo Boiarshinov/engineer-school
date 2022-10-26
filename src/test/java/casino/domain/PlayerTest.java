@@ -3,20 +3,26 @@ package casino.domain;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PlayerTest {
+    private Player player = new Player();
 
     @Test
     void newPlayerIsNotInTheGame() {
-        var player = new Player();
-
         assertFalse(player.isInGame());
     }
 
-    private static class Player {
+    @Test
+    void playerCanJoinTheGame() {
+        new Game().add(player);
 
-        public boolean isInGame() {
-            return true;
+        assertTrue(player.isInGame());
+    }
+
+    private static class Game {
+
+        void add(Player player) {
         }
     }
 }
