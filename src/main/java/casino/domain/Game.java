@@ -1,11 +1,14 @@
 package casino.domain;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Game {
 
     private final Set<Player> players = new HashSet<>();
+    private final Map<Player, Bet> playerBets = new ConcurrentHashMap<>();
 
     void add(Player player) {
         player.join(this);
@@ -19,5 +22,14 @@ public class Game {
 
         player.leave();
         players.remove(player);
+    }
+
+    public Map<Player, Bet> getBets() {
+        //todo return copy
+        return playerBets;
+    }
+
+    public void addBet(Player player, Bet bet) {
+        playerBets.put(player, bet);
     }
 }
