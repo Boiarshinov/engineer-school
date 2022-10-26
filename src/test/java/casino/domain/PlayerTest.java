@@ -19,10 +19,4 @@ public class PlayerTest {
 
         assertTrue(player.isInGame());
     }
-
-    private static class Game {
-
-        void add(Player player) {
-        }
-    }
 }
