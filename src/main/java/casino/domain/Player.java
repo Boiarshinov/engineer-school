@@ -30,4 +30,12 @@ public class Player {
     public int hashCode() {
         return Objects.hash(currentGame);
     }
+
+    public void buy(Casino casino, int chipsAmount) {
+
+    }
+
+    public int getChipsAmount() {
+        return 0;
+    }
 }
