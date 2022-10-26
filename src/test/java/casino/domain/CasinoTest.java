@@ -6,8 +6,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CasinoTest {
 
+    private static final int CHIPS_AMOUNT = 500;
+    private static final int BET_NUMBER = 3;
+
     @Test
     void playerBuyChips() {
+        var player = createPlayerWithChips();
+
+        assertEquals(CHIPS_AMOUNT, player.getChipsAmount());
+    }
+
+    @Test
+    void playerBet() {
+        var player = createPlayerWithChips();
+        var game = new Game();
+        game.add(player);
+
+        player.bet(CHIPS_AMOUNT, BET_NUMBER);
+
+        assertEquals(0, player.getChipsAmount());
+    }
+
+    private static Player createPlayerWithChips() {
         Player player = new Player();
         Casino casino = new Casino();
 
@@ -15,6 +35,6 @@ public class CasinoTest {
 
         player.buy(casino, chipsAmount);
 
-        assertEquals(chipsAmount, player.getChipsAmount());
+        return player;
     }
 }

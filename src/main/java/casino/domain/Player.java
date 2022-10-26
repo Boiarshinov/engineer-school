@@ -6,6 +6,8 @@ public class Player {
 
     private Game currentGame;
 
+    private int chipsAmount = 0;
+
     public boolean isInGame() {
         return currentGame != null;
     }
@@ -32,10 +34,17 @@ public class Player {
     }
 
     public void buy(Casino casino, int chipsAmount) {
+        addChips(chipsAmount);
+    }
 
+    public void addChips(int amount) {
+        this.chipsAmount += amount;
     }
 
     public int getChipsAmount() {
-        return 0;
+        return chipsAmount;
+    }
+
+    public void bet(int chipsAmount, int betNumber) {
     }
 }
