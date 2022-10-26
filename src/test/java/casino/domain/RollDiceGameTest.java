@@ -2,7 +2,6 @@ package casino.domain;
 
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -113,5 +112,51 @@ class RollDiceGameTest {
 
         verify(winner1).win(betAmount * 6);
         verify(winner2).win(betAmount * 6);
+    }
+
+    @Test
+    void winnerHaveSixBetsAfterGame() {
+        var betAmount = 1;
+        int initialChips = betAmount;
+        var winner = new Player();
+        RollDiceGame game = new RollDiceGame(() -> WINNING_SCORE);
+        winner.buy(initialChips);
+        winner.joins(game);
+        winner.bet(createBet(betAmount, WINNING_SCORE));
+
+        game.play();
+
+        assertEquals(initialChips * 6, winner.getAvailableChips());
+    }
+
+    @Test
+    void loserLoseHisBetAfterGame() {
+        var betAmount = 1;
+        int initialChips = betAmount;
+        var loser = new Player();
+        RollDiceGame game = new RollDiceGame(() -> WINNING_SCORE);
+        loser.buy(initialChips);
+        loser.joins(game);
+        loser.bet(createBet(betAmount, LOOSING_SCORE));
+
+        game.play();
+
+        assertEquals(initialChips - betAmount, loser.getAvailableChips());
+    }
+
+    @Test
+    void winnersHaveSixBetsAfterGame() {
+        RollDiceGame game = new RollDiceGame(() -> WINNING_SCORE);
+
+        var betAmount = 1;
+        int initialChips = betAmount;
+        var winner = new Player();
+        winner.buy(initialChips);
+        winner.joins(game);
+        winner.bet(createBet(betAmount, WINNING_SCORE));
+
+        game.play();
+
+        assertEquals(initialChips * 6, winner.getAvailableChips());
     }
 }
