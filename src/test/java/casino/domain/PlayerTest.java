@@ -19,4 +19,14 @@ public class PlayerTest {
 
         assertTrue(player.isInGame());
     }
+
+    @Test
+    void playerCanLeaveTheGame() {
+        Game game = new Game();
+
+        game.add(player);
+        game.remove(player);
+
+        assertFalse(player.isInGame());
+    }
 }
