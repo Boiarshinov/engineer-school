@@ -2,6 +2,8 @@ package casino.domain;
 
 import org.junit.jupiter.api.Test;
 
+import static casino.domain.TestDataHelper.createPlayerWithChips;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GameTest {
@@ -17,14 +19,16 @@ public class GameTest {
             () -> player.bet(1, 2));
     }
 
-    private static Player createPlayerWithChips() {
-        Player player = new Player();
-        Casino casino = new Casino();
+    @Test
+    void playerCanLeaveGameBeforePlay() {
+        Player player = createPlayerWithChips();
+        Game game = new Game();
+        game.add(player);
 
-        int chipsAmount = 500;
+        player.bet(1, 2);
 
-        player.buy(casino, chipsAmount);
+        game.remove(player);
 
-        return player;
+        assertFalse(game.getPlayers().contains(player));
     }
 }
