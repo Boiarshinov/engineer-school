@@ -2,8 +2,7 @@ package casino.domain;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
     private Player player = new Player();
@@ -28,5 +27,15 @@ public class PlayerTest {
         game.remove(player);
 
         assertFalse(player.isInGame());
+    }
+
+    @Test
+    void playerCantLeaveGameNotParticipatingIn() {
+        Game runningGame = new Game();
+
+        runningGame.add(player);
+
+        Game fakeGame = new Game();
+        assertThrows(RuntimeException.class, () -> fakeGame.remove(player));
     }
 }

@@ -11,4 +11,8 @@ public class Player {
     public void join(Game game) {
         this.currentGame = game;
     }
+
+    public void leave() {
+        this.currentGame = null;
+    }
 }

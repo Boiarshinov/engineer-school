@@ -8,6 +8,6 @@ public class Game {
     }
 
     public void remove(Player player) {
-
+        player.leave();
     }
 }
