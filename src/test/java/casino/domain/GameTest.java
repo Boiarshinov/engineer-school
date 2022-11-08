@@ -1,15 +1,11 @@
 package casino.domain;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static casino.domain.TestDataHelper.createPlayerWithChips;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -44,9 +40,9 @@ public class GameTest {
         Game game = new Game();
         game.add(player);
 
-        var casinoException = assertThrows(IllegalArgumentException.class,
-            () -> player.bet(0, 2));
-        assertEquals("Bet should have only positive chips amount, but was: 0", casinoException.getMessage());
+        assertThatThrownBy(() -> player.bet(0, 2))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Bet should have only positive chips amount");
     }
 
     @ParameterizedTest
