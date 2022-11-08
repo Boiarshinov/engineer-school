@@ -1,5 +1,6 @@
 package casino.domain;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -82,4 +83,17 @@ public class GameTest {
         assertEquals(initialAmount - BET_AMOUNT, player.getChipsAmount());
     }
 
+    @Disabled
+    @Test
+    void playerGainNothingOnLose() {
+        Player player = createPlayerWithChips();
+        Game game = new Game();
+        game.add(player);
+        player.bet(BET_AMOUNT, BET_NUMBER);
+        int afterBet = player.getChipsAmount();
+
+        game.round();
+
+        assertEquals(afterBet, player.getChipsAmount());
+    }
 }

@@ -39,4 +39,9 @@ public class Game {
     public Set<Player> getPlayers() {
         return players;
     }
+
+    public void round() {
+        throw new IllegalStateException("not implemented yet");
+        //todo
+    }
 }
