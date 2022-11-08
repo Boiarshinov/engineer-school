@@ -46,9 +46,6 @@ public class Player {
     }
 
     public void bet(int chipsAmount, int betNumber) {
-        if (chipsAmount <= 0) {
-            throw new IllegalArgumentException("Bet should have only positive chips amount, but was: " + chipsAmount);
-        }
         Bet bet = Bet.bet(chipsAmount, betNumber);
         currentGame.addBet(this, bet);
         this.chipsAmount -= chipsAmount;
