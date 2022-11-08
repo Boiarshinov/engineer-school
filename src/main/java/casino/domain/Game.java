@@ -13,6 +13,16 @@ public class Game {
     private final Set<Player> players = new HashSet<>();
     private final Map<Player, Bet> playerBets = new HashMap<>();
 
+    private final DiceRoller diceRoller;
+
+    public Game() {
+        this(new RandomDiceRoller());
+    }
+
+    public Game(DiceRoller diceRoller) {
+        this.diceRoller = diceRoller;
+    }
+
     void add(Player player) {
         player.join(this);
         players.add(player);
@@ -44,7 +54,7 @@ public class Game {
     }
 
     public void round() {
-        int winNumber = 3;
+        int winNumber = diceRoller.roll();
 
         EntryStream.of(playerBets)
             .filterValues(bet -> bet.getNumber() == winNumber)

@@ -87,7 +87,7 @@ public class GameTest {
     @Test
     void playerGainNothingOnLose() {
         Player player = createPlayerWithChips();
-        Game game = new Game();
+        Game game = new Game(() -> BET_NUMBER);
         game.add(player);
         int loseBetNumber = 2;
         player.bet(BET_AMOUNT, loseBetNumber);
@@ -106,7 +106,7 @@ public class GameTest {
     })
     void playerGainSixTimesOnWin(int betAmount, int gain) {
         Player player = createPlayerWithChips();
-        Game game = new Game();
+        Game game = new Game(() -> BET_NUMBER);
         game.add(player);
         player.bet(betAmount, BET_NUMBER);
         int afterBet = player.getChipsAmount();
