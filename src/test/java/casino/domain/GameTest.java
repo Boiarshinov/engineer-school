@@ -3,6 +3,7 @@ package casino.domain;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static casino.domain.TestDataHelper.BET_AMOUNT;
@@ -94,5 +95,23 @@ public class GameTest {
         game.round();
 
         assertEquals(afterBet, player.getChipsAmount());
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+        "1,6",
+        "2,12",
+        "3,18"
+    })
+    void playerGainSixTimesOnWin(int betAmount, int gain) {
+        Player player = createPlayerWithChips();
+        Game game = new Game();
+        game.add(player);
+        player.bet(betAmount, BET_NUMBER);
+        int afterBet = player.getChipsAmount();
+
+        game.round();
+
+        assertEquals(afterBet + gain, player.getChipsAmount());
     }
 }
