@@ -1,5 +1,7 @@
 package casino.domain;
 
+import one.util.streamex.EntryStream;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -7,6 +9,7 @@ import java.util.Set;
 
 public class Game {
 
+    public static final int WIN_MULTIPLIER = 6;
     private final Set<Player> players = new HashSet<>();
     private final Map<Player, Bet> playerBets = new HashMap<>();
 
@@ -41,6 +44,10 @@ public class Game {
     }
 
     public void round() {
-        //todo
+        int winNumber = 3;
+
+        EntryStream.of(playerBets)
+            .filterValues(bet -> bet.getNumber() == winNumber)
+            .forKeyValue((player, bet) -> player.addChips(bet.getChips() * WIN_MULTIPLIER));
     }
 }

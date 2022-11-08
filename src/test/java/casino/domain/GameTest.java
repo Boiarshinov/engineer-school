@@ -89,7 +89,8 @@ public class GameTest {
         Player player = createPlayerWithChips();
         Game game = new Game();
         game.add(player);
-        player.bet(BET_AMOUNT, BET_NUMBER);
+        int loseBetNumber = 2;
+        player.bet(BET_AMOUNT, loseBetNumber);
         int afterBet = player.getChipsAmount();
 
         game.round();
