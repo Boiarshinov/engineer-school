@@ -8,6 +8,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static casino.domain.TestDataHelper.BET_AMOUNT;
 import static casino.domain.TestDataHelper.BET_NUMBER;
+import static casino.domain.TestDataHelper.CHIPS_AMOUNT;
+import static casino.domain.TestDataHelper.LOSE_BET_NUMBER;
 import static casino.domain.TestDataHelper.createPlayerWithChips;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -89,8 +91,7 @@ public class GameTest {
         Player player = createPlayerWithChips();
         Game game = new Game(() -> BET_NUMBER);
         game.add(player);
-        int loseBetNumber = 2;
-        player.bet(BET_AMOUNT, loseBetNumber);
+        player.bet(BET_AMOUNT, LOSE_BET_NUMBER);
         int afterBet = player.getChipsAmount();
 
         game.round();
@@ -114,5 +115,21 @@ public class GameTest {
         game.round();
 
         assertEquals(afterBet + gain, player.getChipsAmount());
+    }
+
+    @Test
+    void casinoGainAllLoseBets() {
+        Player player = new Player();
+        Casino casino = new Casino();
+        player.buy(casino, CHIPS_AMOUNT);
+        Game game = new Game(() -> LOSE_BET_NUMBER);
+        game.add(player);
+        int playerBetAmount = BET_AMOUNT;
+        player.bet(playerBetAmount, BET_NUMBER);
+        int casinoChipsAmount = casino.getChipsAmount();
+
+        game.round();
+
+        assertEquals(casinoChipsAmount + playerBetAmount, casino.getChipsAmount());
     }
 }
