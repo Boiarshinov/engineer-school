@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static casino.domain.TestDataHelper.createPlayerWithChips;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,21 +41,20 @@ public class GameTest {
         Player player = createPlayerWithChips();
         Game game = new Game();
         game.add(player);
+
         var casinoException = assertThrows(IllegalArgumentException.class,
             () -> player.bet(0, 2));
         assertEquals("Bet should have only positive chips amount, but was: 0", casinoException.getMessage());
     }
 
-    //TODO
-    @Disabled
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6})
-    void onlyBetOnNumbersFromOneToSix(int betNumber) {
+    void canBetOnNumbersFromOneToSix(int betNumber) {
         Player player = createPlayerWithChips();
         Game game = new Game();
         game.add(player);
-        var casinoException = assertThrows(IllegalArgumentException.class,
-                () -> player.bet(10, betNumber));
-        assertEquals("Bet should have only positive chips amount, but was: 0", casinoException.getMessage());
+
+        player.bet(10, betNumber);
     }
+
 }
