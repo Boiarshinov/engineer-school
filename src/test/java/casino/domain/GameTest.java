@@ -59,7 +59,6 @@ public class GameTest {
         player.bet(10, betNumber);
     }
 
-    @Disabled
     @ParameterizedTest
     @ValueSource(ints = {0, 7})
     void failAtBetOnNumbersOutsideFromOneToSix(int betNumber) {

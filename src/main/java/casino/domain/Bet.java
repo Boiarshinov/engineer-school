@@ -12,6 +12,9 @@ public class Bet {
     }
 
     public static Bet bet(int chips, int number) {
+        if (number < 1 || number > 6) {
+            throw new IllegalArgumentException("Bet number should be between 1 and 6. but was: " + number);
+        }
         return new Bet(chips, number);
     }
 
