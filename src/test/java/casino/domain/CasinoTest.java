@@ -24,8 +24,6 @@ public class CasinoTest {
 
         player.bet(CHIPS_AMOUNT, BET_NUMBER);
 
-        assertEquals(0, player.getChipsAmount());
-
         Map<Player, Bet> bets = game.getBets();
         Bet bet = bets.get(player);
         assertEquals(Bet.bet(CHIPS_AMOUNT, BET_NUMBER), bet);

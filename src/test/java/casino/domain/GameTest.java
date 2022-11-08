@@ -4,8 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static casino.domain.TestDataHelper.BET_AMOUNT;
+import static casino.domain.TestDataHelper.BET_NUMBER;
 import static casino.domain.TestDataHelper.createPlayerWithChips;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -17,9 +20,9 @@ public class GameTest {
         Game game = new Game();
         game.add(player);
 
-        player.bet(1, 2);
+        player.bet(BET_AMOUNT, BET_NUMBER);
         assertThrows(CasinoException.class,
-            () -> player.bet(1, 2));
+            () -> player.bet(BET_AMOUNT, BET_NUMBER));
     }
 
     @Test
@@ -27,7 +30,7 @@ public class GameTest {
         Player player = createPlayerWithChips();
         Game game = new Game();
         game.add(player);
-        player.bet(1, 2);
+        player.bet(BET_AMOUNT, BET_NUMBER);
 
         game.remove(player);
 
@@ -40,7 +43,7 @@ public class GameTest {
         Game game = new Game();
         game.add(player);
 
-        assertThatThrownBy(() -> player.bet(0, 2))
+        assertThatThrownBy(() -> player.bet(0, BET_NUMBER))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("Bet should have only positive chips amount");
     }
@@ -52,7 +55,7 @@ public class GameTest {
         Game game = new Game();
         game.add(player);
 
-        player.bet(10, betNumber);
+        player.bet(BET_AMOUNT, betNumber);
     }
 
     @ParameterizedTest
@@ -62,9 +65,21 @@ public class GameTest {
         Game game = new Game();
         game.add(player);
 
-        assertThatThrownBy(() -> player.bet(10, betNumber))
+        assertThatThrownBy(() -> player.bet(BET_AMOUNT, betNumber))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("Bet number should be between 1 and 6");
+    }
+
+    @Test
+    void playerLoseAmountOnBet() {
+        Player player = createPlayerWithChips();
+        Game game = new Game();
+        game.add(player);
+        int initialAmount = player.getChipsAmount();
+
+        player.bet(BET_AMOUNT, BET_NUMBER);
+
+        assertEquals(initialAmount - BET_AMOUNT, player.getChipsAmount());
     }
 
 }
