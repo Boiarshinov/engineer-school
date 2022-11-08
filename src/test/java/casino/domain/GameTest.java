@@ -1,6 +1,5 @@
 package casino.domain;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -10,7 +9,6 @@ import static casino.domain.TestDataHelper.BET_AMOUNT;
 import static casino.domain.TestDataHelper.BET_NUMBER;
 import static casino.domain.TestDataHelper.CHIPS_AMOUNT;
 import static casino.domain.TestDataHelper.LOSE_BET_NUMBER;
-import static casino.domain.TestDataHelper.createPlayerWithChips;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -20,83 +18,72 @@ public class GameTest {
 
     @Test
     void playerCannotBetMoreThanOneTimeInOneGameRound() {
-        Player player = createPlayerWithChips();
-        Game game = new Game();
-        game.add(player);
-
-        player.bet(BET_AMOUNT, BET_NUMBER);
-        assertThrows(CasinoException.class,
-            () -> player.bet(BET_AMOUNT, BET_NUMBER));
+        defaultInitials(((casino, game, player) -> {
+            player.bet(BET_AMOUNT, BET_NUMBER);
+            assertThrows(CasinoException.class,
+                () -> player.bet(BET_AMOUNT, BET_NUMBER));
+        }));
     }
 
     @Test
     void playerCanLeaveGameBeforePlay() {
-        Player player = createPlayerWithChips();
-        Game game = new Game();
-        game.add(player);
-        player.bet(BET_AMOUNT, BET_NUMBER);
+        defaultInitials(((casino, game, player) -> {
+            player.bet(BET_AMOUNT, BET_NUMBER);
 
-        game.remove(player);
+            game.remove(player);
 
-        assertFalse(player.isInGame());
+            assertFalse(player.isInGame());
+        }));
     }
 
     @Test
     void onlyPositiveBetChipsAmount() {
-        Player player = createPlayerWithChips();
-        Game game = new Game();
-        game.add(player);
-
-        assertThatThrownBy(() -> player.bet(0, BET_NUMBER))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("Bet should have only positive chips amount");
+        defaultInitials(((casino, game, player) -> {
+            assertThatThrownBy(() -> player.bet(0, BET_NUMBER))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Bet should have only positive chips amount");
+        }));
     }
 
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6})
     void canBetOnNumbersFromOneToSix(int betNumber) {
-        Player player = createPlayerWithChips();
-        Game game = new Game();
-        game.add(player);
-
-        player.bet(BET_AMOUNT, betNumber);
+        defaultInitials(((casino, game, player) -> {
+            player.bet(BET_AMOUNT, betNumber);
+        }));
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 7})
     void failAtBetOnNumbersOutsideFromOneToSix(int betNumber) {
-        Player player = createPlayerWithChips();
-        Game game = new Game();
-        game.add(player);
-
-        assertThatThrownBy(() -> player.bet(BET_AMOUNT, betNumber))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("Bet number should be between 1 and 6");
+        defaultInitials(((casino, game, player) -> {
+            assertThatThrownBy(() -> player.bet(BET_AMOUNT, betNumber))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Bet number should be between 1 and 6");
+        }));
     }
 
     @Test
     void playerLoseAmountOnBet() {
-        Player player = createPlayerWithChips();
-        Game game = new Game();
-        game.add(player);
-        int initialAmount = player.getChipsAmount();
+        defaultInitials(((casino, game, player) -> {
+            int initialAmount = player.getChipsAmount();
 
-        player.bet(BET_AMOUNT, BET_NUMBER);
+            player.bet(BET_AMOUNT, BET_NUMBER);
 
-        assertEquals(initialAmount - BET_AMOUNT, player.getChipsAmount());
+            assertEquals(initialAmount - BET_AMOUNT, player.getChipsAmount());
+        }));
     }
 
     @Test
     void playerGainNothingOnLose() {
-        Player player = createPlayerWithChips();
-        Game game = new Game(() -> BET_NUMBER);
-        game.add(player);
-        player.bet(BET_AMOUNT, LOSE_BET_NUMBER);
-        int afterBet = player.getChipsAmount();
+        defaultInitials(((casino, game, player) -> {
+            player.bet(BET_AMOUNT, LOSE_BET_NUMBER);
+            int afterBet = player.getChipsAmount();
 
-        game.round();
+            game.round();
 
-        assertEquals(afterBet, player.getChipsAmount());
+            assertEquals(afterBet, player.getChipsAmount());
+        }));
     }
 
     @ParameterizedTest
@@ -106,30 +93,41 @@ public class GameTest {
         "3,18"
     })
     void playerGainSixTimesOnWin(int betAmount, int gain) {
-        Player player = createPlayerWithChips();
-        Game game = new Game(() -> BET_NUMBER);
-        game.add(player);
-        player.bet(betAmount, BET_NUMBER);
-        int afterBet = player.getChipsAmount();
+        defaultInitials(((casino, game, player) -> {
+            player.bet(betAmount, BET_NUMBER);
+            int afterBet = player.getChipsAmount();
 
-        game.round();
+            game.round();
 
-        assertEquals(afterBet + gain, player.getChipsAmount());
+            assertEquals(afterBet + gain, player.getChipsAmount());
+        }));
     }
 
     @Test
     void casinoGainAllLoseBets() {
+        defaultInitials((casino, game, player) -> {
+            int playerBetAmount = BET_AMOUNT;
+            player.bet(playerBetAmount, BET_NUMBER);
+            int casinoChipsAmount = casino.getChipsAmount();
+
+            game.round();
+
+            assertEquals(casinoChipsAmount + playerBetAmount, casino.getChipsAmount());
+        });
+    }
+
+    void defaultInitials(TestCase testCase) {
+        Casino casino = new Casino(() -> new Game(() -> BET_NUMBER));
+        Game game = casino.newGame();
         Player player = new Player();
-        Casino casino = new Casino();
         player.buy(casino, CHIPS_AMOUNT);
-        Game game = new Game(() -> LOSE_BET_NUMBER);
         game.add(player);
-        int playerBetAmount = BET_AMOUNT;
-        player.bet(playerBetAmount, BET_NUMBER);
-        int casinoChipsAmount = casino.getChipsAmount();
 
-        game.round();
+        testCase.run(casino, game, player);
+    }
 
-        assertEquals(casinoChipsAmount + playerBetAmount, casino.getChipsAmount());
+    @FunctionalInterface
+    private interface TestCase {
+        void run(Casino casino, Game game, Player player);
     }
 }

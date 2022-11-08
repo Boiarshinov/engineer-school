@@ -59,5 +59,18 @@ public class Game {
         EntryStream.of(playerBets)
             .filterValues(bet -> bet.getNumber() == winNumber)
             .forKeyValue((player, bet) -> player.addChips(bet.getChips() * WIN_MULTIPLIER));
+
+        int casinoGain = playerBets.values().stream()
+            .filter(bet -> bet.getNumber() != winNumber)
+            .map(Bet::getChips)
+            .reduce(0, Integer::sum);
+
+        int casinoLoss = playerBets.values().stream()
+            .filter(bet -> bet.getNumber() != winNumber)
+            .map(Bet::getChips)
+            .reduce(0, Integer::sum);
+
+        int casinoDelta = casinoGain - casinoLoss;
+
     }
 }
