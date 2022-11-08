@@ -41,7 +41,6 @@ public class Game {
     }
 
     public void round() {
-        throw new IllegalStateException("not implemented yet");
         //todo
     }
 }

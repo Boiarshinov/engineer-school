@@ -83,7 +83,6 @@ public class GameTest {
         assertEquals(initialAmount - BET_AMOUNT, player.getChipsAmount());
     }
 
-    @Disabled
     @Test
     void playerGainNothingOnLose() {
         Player player = createPlayerWithChips();
