@@ -14,12 +14,14 @@ public class Game {
     private final Map<Player, Bet> playerBets = new HashMap<>();
 
     private final DiceRoller diceRoller;
+    private final Casino casino;
 
-    public Game() {
-        this(new RandomDiceRoller());
+    public Game(Casino casino) {
+        this(casino, new RandomDiceRoller());
     }
 
-    public Game(DiceRoller diceRoller) {
+    public Game(Casino casino, DiceRoller diceRoller) {
+        this.casino = casino;
         this.diceRoller = diceRoller;
     }
 

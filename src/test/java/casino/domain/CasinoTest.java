@@ -11,21 +11,18 @@ public class CasinoTest {
 
     @Test
     void playerBuyChips() {
-        var player = createPlayerWithChips();
-
-        assertEquals(CHIPS_AMOUNT, player.getChipsAmount());
+        defaultInitials((casino, game, player) ->
+            assertEquals(CHIPS_AMOUNT, player.getChipsAmount()));
     }
 
     @Test
     void playerBet() {
-        var player = createPlayerWithChips();
-        var game = new Game();
-        game.add(player);
+        defaultInitials((casino, game, player) -> {
+            player.bet(CHIPS_AMOUNT, BET_NUMBER);
 
-        player.bet(CHIPS_AMOUNT, BET_NUMBER);
-
-        Map<Player, Bet> bets = game.getBets();
-        Bet bet = bets.get(player);
-        assertEquals(Bet.bet(CHIPS_AMOUNT, BET_NUMBER), bet);
+            Map<Player, Bet> bets = game.getBets();
+            Bet bet = bets.get(player);
+            assertEquals(Bet.bet(CHIPS_AMOUNT, BET_NUMBER), bet);
+        });
     }
 }

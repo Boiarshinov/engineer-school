@@ -7,8 +7,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static casino.domain.TestDataHelper.BET_AMOUNT;
 import static casino.domain.TestDataHelper.BET_NUMBER;
-import static casino.domain.TestDataHelper.CHIPS_AMOUNT;
 import static casino.domain.TestDataHelper.LOSE_BET_NUMBER;
+import static casino.domain.TestDataHelper.defaultInitials;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -114,20 +114,5 @@ public class GameTest {
 
             assertEquals(casinoChipsAmount + playerBetAmount, casino.getChipsAmount());
         });
-    }
-
-    void defaultInitials(TestCase testCase) {
-        Casino casino = new Casino(() -> new Game(() -> BET_NUMBER));
-        Game game = casino.newGame();
-        Player player = new Player();
-        player.buy(casino, CHIPS_AMOUNT);
-        game.add(player);
-
-        testCase.run(casino, game, player);
-    }
-
-    @FunctionalInterface
-    private interface TestCase {
-        void run(Casino casino, Game game, Player player);
     }
 }

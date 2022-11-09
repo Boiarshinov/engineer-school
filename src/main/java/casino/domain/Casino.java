@@ -1,21 +1,21 @@
 package casino.domain;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class Casino {
 
-    private final Supplier<Game> gameSupplier;
+    private final Function<Casino, Game> gameFactory;
 
     public Casino() {
-        this(() -> new Game());
+        this(casino -> new Game(casino));
     }
 
-    public Casino(Supplier<Game> gameSupplier) {
-        this.gameSupplier = gameSupplier;
+    public Casino(Function<Casino, Game> gameFactory) {
+        this.gameFactory = gameFactory;
     }
 
     public Game newGame() {
-        return gameSupplier.get();
+        return gameFactory.apply(this);
     }
 
     public int getChipsAmount() {

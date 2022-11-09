@@ -15,4 +15,19 @@ public class TestDataHelper {
 
         return player;
     }
+
+    public static void defaultInitials(TestCase testCase) {
+        Casino casino = new Casino((casino1) -> new Game(casino1, () -> BET_NUMBER));
+        Game game = casino.newGame();
+        Player player = new Player();
+        player.buy(casino, CHIPS_AMOUNT);
+        game.add(player);
+
+        testCase.run(casino, game, player);
+    }
+
+    @FunctionalInterface
+    public interface TestCase {
+        void run(Casino casino, Game game, Player player);
+    }
 }
