@@ -115,4 +115,17 @@ public class GameTest {
             assertEquals(casinoChipsAmount + playerBetAmount, casino.getChipsAmount());
         });
     }
+
+    @Test
+    void casinoLoseWhenPlayerWin() {
+        defaultInitials((casino, game, player) -> {
+            int playerBetAmount = BET_AMOUNT;
+            player.bet(playerBetAmount, BET_NUMBER);
+            int casinoChipsAmount = casino.getChipsAmount();
+
+            game.round();
+
+            assertEquals(casinoChipsAmount - 6 * playerBetAmount, casino.getChipsAmount());
+        });
+    }
 }
