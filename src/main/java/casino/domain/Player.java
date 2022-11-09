@@ -46,6 +46,9 @@ public class Player {
     }
 
     public void bet(int chipsAmount, int betNumber) {
+        if (chipsAmount > this.chipsAmount) {
+            throw new CasinoException("Player cannot bet more chips than he has");
+        }
         Bet bet = Bet.bet(chipsAmount, betNumber);
         currentGame.addBet(this, bet);
         this.chipsAmount -= chipsAmount;
