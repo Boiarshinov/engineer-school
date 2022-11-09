@@ -14,6 +14,7 @@ public class Casino {
 
     public Casino(Function<Casino, Game> gameFactory) {
         this.gameFactory = gameFactory;
+        this.chipsAmount = 1_000_000;
     }
 
     public Game newGame() {
