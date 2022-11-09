@@ -107,7 +107,7 @@ public class GameTest {
     void casinoGainAllLoseBets() {
         defaultInitials((casino, game, player) -> {
             int playerBetAmount = BET_AMOUNT;
-            player.bet(playerBetAmount, BET_NUMBER);
+            player.bet(playerBetAmount, LOSE_BET_NUMBER);
             int casinoChipsAmount = casino.getChipsAmount();
 
             game.round();

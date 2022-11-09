@@ -68,11 +68,12 @@ public class Game {
             .reduce(0, Integer::sum);
 
         int casinoLoss = playerBets.values().stream()
-            .filter(bet -> bet.getNumber() != winNumber)
+            .filter(bet -> bet.getNumber() == winNumber)
             .map(Bet::getChips)
             .reduce(0, Integer::sum);
 
         int casinoDelta = casinoGain - casinoLoss;
 
+        casino.addRevenue(casinoDelta);
     }
 }

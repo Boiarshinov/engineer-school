@@ -6,6 +6,8 @@ public class Casino {
 
     private final Function<Casino, Game> gameFactory;
 
+    private int chipsAmount;
+
     public Casino() {
         this(casino -> new Game(casino));
     }
@@ -19,6 +21,10 @@ public class Casino {
     }
 
     public int getChipsAmount() {
-        return 0;
+        return chipsAmount;
+    }
+
+    public void addRevenue(int casinoDelta) {
+        chipsAmount += casinoDelta;
     }
 }
