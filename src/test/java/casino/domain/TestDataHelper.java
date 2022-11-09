@@ -7,15 +7,6 @@ public class TestDataHelper {
     public static final int BET_AMOUNT = 1;
     public static final int LOSE_BET_NUMBER = 2;
 
-    public static Player createPlayerWithChips() {
-        Player player = new Player();
-        Casino casino = new Casino();
-
-        player.buy(casino, CHIPS_AMOUNT);
-
-        return player;
-    }
-
     public static void defaultInitials(TestCase testCase) {
         Casino casino = new Casino((casino1) -> new Game(casino1, () -> BET_NUMBER));
         Game game = casino.newGame();
