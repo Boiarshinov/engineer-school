@@ -70,6 +70,7 @@ public class Game {
         int casinoLoss = playerBets.values().stream()
             .filter(bet -> bet.getNumber() == winNumber)
             .map(Bet::getChips)
+            .map(chips -> WIN_MULTIPLIER * chips)
             .reduce(0, Integer::sum);
 
         int casinoDelta = casinoGain - casinoLoss;
