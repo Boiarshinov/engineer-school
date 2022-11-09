@@ -2,7 +2,6 @@ package casino.domain;
 
 import org.junit.jupiter.api.Test;
 
-import static casino.domain.TestDataHelper.BET_AMOUNT;
 import static casino.domain.TestDataHelper.BET_NUMBER;
 import static casino.domain.TestDataHelper.CHIPS_AMOUNT;
 import static casino.domain.TestDataHelper.defaultInitials;

@@ -35,6 +35,7 @@ public class Player {
 
     public void buy(Casino casino, int chipsAmount) {
         addChips(chipsAmount);
+        casino.addRevenue(-chipsAmount);
     }
 
     public void addChips(int amount) {
