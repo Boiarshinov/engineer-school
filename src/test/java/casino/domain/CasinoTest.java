@@ -25,4 +25,16 @@ public class CasinoTest {
             assertEquals(Bet.bet(CHIPS_AMOUNT, BET_NUMBER), bet);
         });
     }
+
+    @Test
+    void casinoLoseChipsWhenPlayerBuyThem() {
+        Casino casino = new Casino();
+        Player player = new Player();
+        int initialCasinoChips = casino.getChipsAmount();
+
+        int playerBought = CHIPS_AMOUNT;
+        player.buy(casino, playerBought);
+
+        assertEquals(initialCasinoChips - playerBought, casino.getChipsAmount());
+    }
 }
